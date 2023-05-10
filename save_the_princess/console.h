@@ -1,13 +1,20 @@
-#include <Windows.h>
+#include <windows.h>
 
-//지정된 콘솔 좌표로 커서를 이동
-void gotoxy(int x, int y)
+void SetColor(unsigned char _BgColor, unsigned char _TextColor)
 {
-    COORD Pos = { x - 1, y - 1 };
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
+    if (_BgColor > 15 || _TextColor > 15)
+        return;
+
+    unsigned short ColorNum = (_BgColor << 4) | _TextColor;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), ColorNum);
+}
+void Clearscreen(void)
+{
+    system("cls");
 }
 
-//커서숨기기
+
+
 void CursorView(char show)
 {
     HANDLE hConsole;
@@ -19,4 +26,14 @@ void CursorView(char show)
     ConsoleCursor.dwSize = 1;
 
     SetConsoleCursorInfo(hConsole, &ConsoleCursor);
+}
+BOOL IsKeyDown(int Key)
+{
+    return ((GetAsyncKeyState(Key) & 0x8000) != 0);
+}
+
+void gotoxy(int x, int y)
+{
+    COORD Pos = { x - 1, y - 1 };
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 }
