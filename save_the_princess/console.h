@@ -13,8 +13,6 @@ void Clearscreen(void)
     system("cls");
 }
 
-
-
 void CursorView(char show)
 {
     HANDLE hConsole;
