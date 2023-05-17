@@ -1,14 +1,14 @@
 #include<stdio.h>
 #include <windows.h>
 #include <conio.h>
-// "console.h"
+//#include "console.h"
 
 //키보드값
-#define UP 0
-#define DOWN 1
+#define UP 72
+#define DOWN 80
+#define SUBMIT 13
 #define LEFT 2
 #define RIGHT 3
-#define SUBMIT 4
 
 //함수 정의 
 void TitleDraw1();   //제목 출력
@@ -22,21 +22,6 @@ int Over()
     init1();
     TitleDraw1();
     menuDraw1();
-    //while (1) {
-    //    TitleDraw(); //화면 출력
-    //    int menuCode = menuDraw();
-    //    if (menuCode == 0) {
-    //        //게임 시작으로 이동
-    //    }
-    //    else if (menuCode == 2) {
-    //        //게임 정보로 이동
-    //        infoDraw();
-    //    }
-    //    else if (menuCode == 4){
-    //        return 0;
-    //    }
-    //    system("cls");
-    //}
     return 0;
 }
 //콘솔 화면 지정 함수 
@@ -67,58 +52,62 @@ void TitleDraw1()
 //메뉴 출력 함수 & 메뉴 선택기능 함수
 int menuDraw1() {
     int x = 55;
-    int y = 40;
-    gotoxy(x - 2, y + 1);
-    printf("> 다시 돌아가기");
-    gotoxy(x, y + 2);
-    printf("    종 료    ");
+    int y = 20;
+    int menuIndex = 0;
+    char menuItems[2][20] = { "돌아가기","종   료" };
 
-    while (1) { //무한 반복
-        int n = keyControl1();
+    while (1) {
+        // 메뉴 아이템 출력
+        for (int i = 0; i < 2; i++) {
+            gotoxy(x, y + i);
+            if (i == menuIndex) printf("> %s", menuItems[i]);
+            else printf("  %s", menuItems[i]);
+        }
+
+        // 입력 처리
+        int n = keyControl();
         switch (n) {
         case UP: {
-            if (y > 26) {
-                gotoxy(x - 2, y);
-                printf(" "); //원래 위치 지우기
-                gotoxy(x - 2, --y);
-                printf(">");//다시그리기
-
-            }
+            if (menuIndex > 0) menuIndex--;
             break;
         }
-        case DOWN: {    //입력된 키의 값이 DOWN인 경우
-            if (y < 27) {
-                gotoxy(x - 2, y);
-                printf(" "); //원래 위치 지우기
-                gotoxy(x - 2, ++y);
-                printf(">");//다시그리기
-            }
+        case DOWN: {
+            if (menuIndex < 2) menuIndex++;
             break;
         }
         case SUBMIT: {
-            return y - 25;
+            if (menuIndex == 0) {
+                return Function();
+            }
+            else if (menuIndex == 1) {
+                exit(0);
+            }
         }
         }
     }
 }
-////위,아래 ,왼,우 키값 지정 함수 
-int keyControl1() {
-    char temp = _getch();
 
-    if (temp == 'w' || temp == 'W') {
+int keyControl1() {
+    int temp = _getch();
+
+    // 미세한 위치 조정을 위한 추가 코드
+    if (temp == 0xE0 || temp == 0)
+    {
+        temp = _getch();
+    }
+
+    switch (temp) {
+    case 72: // VK_UP
         return UP;
-    }
-    else if (temp == 'a' || temp == 'A') {
-        return LEFT;
-    }
-    else if (temp == 's' || temp == 'S') {
+    case 80: // VK_DOWN
         return DOWN;
-    }
-    else if (temp == 'd' || temp == 'D') {
+    case 75: // VK_LEFT
+        return LEFT;
+    case 77: // VK_RIGHT
         return RIGHT;
-    }
-    //스페이스
-    else if (temp == ' ') {
+    case ' ': // Space
         return SUBMIT;
+    default:
+        return 0;
     }
 }
