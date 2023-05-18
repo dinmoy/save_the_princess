@@ -10,9 +10,9 @@
 //esc 아스키 코드
 #define ESC 27
 //최대 적 수
-#define MAXENEMY 10
+#define MAXENEMY 20
 //최대 총알 수
-#define MAXBALL 10
+#define MAXBULLET 10
 
 //점수
 int Score;
@@ -44,14 +44,11 @@ struct Bullet
     int nFrame;
     int nStay;
 }
-Bullet[MAXBALL];
+Bullet[MAXBULLET];
 
 //적 모양
 const char* Type_Enemy[] = { " ;:^:; "," zZWZz ", " oO@Oo ", " <-=-> " };
 
-void textcolor(int colorNum) {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), colorNum);
-}
 
 void drawscreen() {
     textcolor(14);
@@ -178,6 +175,7 @@ void Function()
                 if ((rand() % 2) + 1 == 1)
                 {
                     Enemy[i].x = 7;
+                    Enemy[i].y = 30;
                     Enemy[i].movementcal = 1;
                 }
 
@@ -189,7 +187,7 @@ void Function()
 
                 //while로 바꾸장!
                 for (;;) {
-                    Enemy[i].y = rand() % 10 + 2;
+                    Enemy[i].y = rand() % 15 + 2;
                     for (BulletFound = FALSE, j = 0; j < MAXENEMY; j++)
                     {
                         if (Enemy[j].exist == TRUE && Enemy[j].y == Enemy[i].y)
@@ -231,7 +229,7 @@ void Function()
         }
 
         // 적군 총알 이동
-        for (i = 0; i < MAXBALL; i++)
+        for (i = 0; i < MAXBULLET; i++)
         {
             if (Bullet[i].exist == FALSE)
                 continue;
@@ -255,7 +253,7 @@ void Function()
         }
 
         // 적군 총알과 아군의 충돌 판정
-        for (i = 0; i < MAXBALL; i++) {
+        for (i = 0; i < MAXBULLET; i++) {
             if (Bullet[i].exist == FALSE) continue;
             if (Bullet[i].y == 23 && abs(Bullet[i].x - player.x) <= 2) {
                 gotoxy(player.x - 3, 21); puts("   .   ");
@@ -284,8 +282,8 @@ void Function()
                     puts(Type_Enemy[Enemy[i].Type]);
                     // 총알 발사
                     if (rand() % 20 == 0) {
-                        for (j = 0; j < MAXBALL && Bullet[j].exist == TRUE; j++) { ; }
-                        if (j != MAXBALL) {
+                        for (j = 0; j < MAXBULLET && Bullet[j].exist == TRUE; j++) { ; }
+                        if (j != MAXBULLET) {
                             Bullet[j].x = Enemy[i].x + 2;
                             Bullet[j].y = Enemy[i].y + 1;
                             Bullet[j].nFrame = Bullet[j].nStay = Enemy[i].nFrame * 6;
@@ -305,23 +303,14 @@ void Function()
         gotoxy(67, 2);
         printf("점수: %d", Score);
 
-        gotoxy(80, 10);
-        printf("이동방법");
-
-        gotoxy(80, 12);
-        printf("위 : ↑");
-
-        gotoxy(80, 14);
-        printf("아래 : ↓");
-
-        gotoxy(80, 16);
-        printf("왼쪽 : ←");
-
-        gotoxy(80, 18);
-        printf("오른쪽 : →");
-
-        gotoxy(80, 20);
-        printf("공격 : SPACE");
+        gotoxy(85, 7);
+        printf("♣작전명! 공주를 구하라♣");
+        gotoxy(85, 11);
+        printf("★플레이어 이동 방법★");
+        gotoxy(85, 13);
+        printf("↑ ↓ ← →를 이용하여 이동");
+        gotoxy(85, 15);
+        printf("스페이스바 ==> 공격");
 
         // 초당 10 프레임
         Sleep(40);
