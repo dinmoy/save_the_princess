@@ -25,21 +25,6 @@ int main()
     TitleDraw();
     menuDraw();
     printGameInstructions(); // 게임 방법 화면 출력 함수
-    //while (1) {
-    //    TitleDraw(); //화면 출력
-    //    int menuCode = menuDraw();
-    //    if (menuCode == 0) {
-    //        //게임 시작으로 이동
-    //    }
-    //    else if (menuCode == 2) {
-    //        //게임 정보로 이동
-    //        infoDraw();
-    //    }
-    //    else if (menuCode == 4){
-    //        return 0;
-    //    }
-    //    system("cls");
-    //}
     return 0;
 }
 //콘솔 화면 지정 함수 
