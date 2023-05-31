@@ -1,7 +1,9 @@
 ﻿#include <stdio.h>
-#include <windows.h>
+#include <stdlib.h>
+#include <time.h>
 #include <conio.h>
-#include "console.h"
+#include <Windows.h>
+#include <math.h>
 
 //키보드값
 #define UP 0
@@ -25,6 +27,21 @@ int main()
     TitleDraw();
     menuDraw();
     printGameInstructions(); // 게임 방법 화면 출력 함수
+    //while (1) {
+    //    TitleDraw(); //화면 출력
+    //    int menuCode = menuDraw();
+    //    if (menuCode == 0) {
+    //        //게임 시작으로 이동
+    //    }
+    //    else if (menuCode == 2) {
+    //        //게임 정보로 이동
+    //        infoDraw();
+    //    }
+    //    else if (menuCode == 4){
+    //        return 0;
+    //    }
+    //    system("cls");
+    //}
     return 0;
 }
 //콘솔 화면 지정 함수 
@@ -35,27 +52,32 @@ void init() {
 //제목 출력 함수  \n");
 void TitleDraw()
 {
-    printf("\t\t\t                _______  _______  __   __  _______                 \n");
-    printf("\t\t\t               |       ||   _   ||  | |  ||       |                \n");
-    printf("\t\t\t               |  _____||  |_|  ||  |_|  ||    ___|                \n");
-    printf("\t\t\t               | |_____ |       ||       ||   |___                 \n");
-    printf("\t\t\t               |_____  ||       ||       ||    ___|                \n");
-    printf("\t\t\t                _____| ||   _   | |     | |   |___                 \n");
-    printf("\t\t\t               |_______||__| |__|  |___|  |_______|                \n\n");
-    printf("\t\t\t                     _______  __   __  _______                     \n");
-    printf("\t\t\t                    |       ||  | |  ||       |                    \n");
-    printf("\t\t\t                    |_     _||  |_|  ||    ___|                    \n");
-    printf("\t\t\t                      |   |  |       ||   |___                     \n");
-    printf("\t\t\t                      |   |  |       ||    ___|                    \n");
-    printf("\t\t\t                      |   |  |   _   ||   |___                     \n");
-    printf("\t\t\t                      |___|  |__| |__||_______|                    \n\n\n");
-    printf("\t\t\t      _______  ______    ___   __    _  _______  _______  _______  \n");
-    printf("\t\t\t     |       ||    _ |  |   | |  |  | ||       ||       ||       | \n");
-    printf("\t\t\t     |    _  ||   | ||  |   | |   |_| ||       ||    ___||  _____| \n");
-    printf("\t\t\t     |   |_| ||   |_||_ |   | |       ||       ||   |___ | |_____  \n");
-    printf("\t\t\t     |    ___||    __  ||   | |  _    ||      _||    ___||_____  | \n");
-    printf("\t\t\t     |   |    |   |  | ||   | | | |   ||     |_ |   |___  _____| | \n");
-    printf("\t\t\t     |___|    |___|  |_||___| |_|  |__||_______||_______||_______| \n");
+    textcolor(14);
+    printf("\t\t\t\                _______  _______  __   __  _______                 \n");
+    printf("\t\t\t\               |       ||   _   ||  | |  ||       |                \n");
+    printf("\t\t\t\               |  _____||  |_|  ||  |_|  ||    ___|                \n");
+    printf("\t\t\t\               | |_____ |       ||       ||   |___                 \n");
+    printf("\t\t\t\               |_____  ||       ||       ||    ___|                \n");
+    printf("\t\t\t\                _____| ||   _   | |     | |   |___                 \n");
+    printf("\t\t\t\               |_______||__| |__|  |___|  |_______|                \n\n");
+    printf("\t\t\t\      _______  ______    ___   __    _  _______  _______  _______  \n");
+    printf("\t\t\t\     |       ||    _ |  |   | |  |  | ||       ||       ||       | \n");
+    printf("\t\t\t\     |    _  ||   | ||  |   | |   |_| ||       ||    ___||  _____| \n");
+    printf("\t\t\t\     |   |_| ||   |_||_ |   | |       ||       ||   |___ | |_____  \n");
+    printf("\t\t\t\     |    ___||    __  ||   | |  _    ||      _||    ___||_____  | \n");
+    printf("\t\t\t\     |   |    |   |  | ||   | | | |   ||     |_ |   |___  _____| | \n");
+    printf("\t\t\t\     |___|    |___|  |_||___| |_|  |__||_______||_______||_______| \n");
+    printf("\t\t\t\t                                                                   \n");
+    printf("\t\t\t\t                  |-|-|-|-|-|-|-|-|-|-|-|                          \n");
+    printf("\t\t\t\t                  |    ___       ___    |                          \n");
+    printf("\t\t\t\t                  |   |   |     |   |   |                          \n");
+    printf("\t\t\t\t                  |  |     |   |     |  |                          \n");
+    printf("\t\t\t\t                  -----------------------                          \n");
+    printf("\t\t\t\t           |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|                   \n");
+    printf("\t\t\t\t           |     ____       ____       ___     |                   \n");
+    printf("\t\t\t\t           |    |    |     |    |     |   |    |                   \n");
+    printf("\t\t\t\t           |   |      |   |      |   |     |   |                   \n");
+    printf("\t\t\t\t           -------------------------------------                   \n");
 }
 
 //메뉴 출력 함수 & 메뉴 선택기능 함수
