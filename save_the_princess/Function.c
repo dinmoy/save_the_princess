@@ -114,7 +114,6 @@ void Function()
             if (player.x < 72)
                 player.x++;
         }
-
         if (GetAsyncKeyState(VK_UP))
         {
             if (player.y > 6)
@@ -138,7 +137,6 @@ void Function()
             {
                 switch (ch)
                 {
-
                 case ' ': // Space
                     if (bullet.x == -1)
                     {
@@ -227,7 +225,7 @@ void Function()
                 gotoxy(Enemy[i].x - 3, Enemy[i].y);
                 puts("       ");
                 Score += 5;
-                if (Score == 20) Success();
+                if (Score == 5) Success();
                 break;
 
             }
@@ -310,7 +308,7 @@ void Function()
         printf("점수: %d", Score);
 
         gotoxy(80, 10);
-        printf("♣작전명 공주를 구하여라!♣");
+        printf("♣♣");
 
         gotoxy(80, 12);
         printf("위 : ↑");
@@ -336,7 +334,7 @@ end:
     printf("==========================GAMEOVER==========================\n\n");
     gotoxy(58, 15);
     printf("점수=%d\n\n\n\n\n\n\n\n\n\n\n\n", Score);
-    CursorView(0);  
+    CursorView(0);
     getchar();*/
     textcolor(15);
     Over();
