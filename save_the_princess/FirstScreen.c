@@ -146,8 +146,3 @@ int keyControl() {
         return 0;
     }
 }
-
-void printGameInstructions() {
-    LPCWSTR message = L"상하좌우 키를 나타내어 플레이어를 움직이며 공격은 스페이스바 입니다.";
-    MessageBoxW(NULL, message, L"알림", MB_OK);
-}
