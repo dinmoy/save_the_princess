@@ -1,82 +1,78 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <conio.h>
 #include <Windows.h>
 #include <math.h>
 
-
-//Å°º¸µå°ª
-#define UP 72
-#define DOWN 80
-#define SUBMIT 13
+//í‚¤ë³´ë“œê°’
+#define UP 0
+#define DOWN 1
 #define LEFT 2
 #define RIGHT 3
+#define SUBMIT 4
 
-//ÇÔ¼ö Á¤ÀÇ 
-void TitleDraw1();   //Á¦¸ñ Ãâ·Â
-void init1();        //ÄÜ¼ÖÃ¢ Å©±âÇÔ¼ö 
-int menuDraw1();     //¸Ş´º Ãâ·Â&¼±ÅÃ ÇÔ¼ö 
-int keyControl1();   //È­»ìÇ¥ ¼±ÅÃÇÏ´Â °Å
+//í•¨ìˆ˜ ì •ì˜ 
+void OverDraw();   //ì œëª© ì¶œë ¥
+void init1();        //ì½˜ì†”ì°½ í¬ê¸°í•¨ìˆ˜ 
+int Overmenu();     //ë©”ë‰´ ì¶œë ¥&ì„ íƒ í•¨ìˆ˜ 
+int O_keyControl();   //í™”ì‚´í‘œ ì„ íƒí•˜ëŠ” ê±°
 
-//mainÇÔ¼ö 
+
+//mainí•¨ìˆ˜ 
 int Over()
 {
     init1();
-    TitleDraw1();
-    menuDraw1();
+    OverDraw();
+    Overmenu();
     return 0;
 }
-//ÄÜ¼Ö È­¸é ÁöÁ¤ ÇÔ¼ö 
+//ì½˜ì†” í™”ë©´ ì§€ì • í•¨ìˆ˜ 
 void init1() {
     system("mode con:cols=120 lines=30 | title Save the Princess");
 }
 
-//Á¦¸ñ Ãâ·Â ÇÔ¼ö  \n");
-void TitleDraw1()
+//ì œëª© ì¶œë ¥ í•¨ìˆ˜  \n");
+void OverDraw()
 {
-    printf("\n\n");
+    printf("\n");
     printf("\t     _______  _______  __   __  _______         _______  __   __  _______  ______      __       \n");
     printf("\t    |       ||   _   ||  |_|  ||       |       |       ||  | |  ||       ||    _ |    |  |      \n");
     printf("\t    |    ___||  |_|  ||       ||    ___|       |   _   ||  |_|  ||    ___||   | ||    |  |      \n");
     printf("\t    |   | __ |       ||       ||   |___        |  | |  ||       ||   |___ |   |_||_   |  |      \n");
     printf("\t    |   ||  ||       ||       ||    ___|       |  |_|  ||       ||    ___||    __  |  |__|      \n");
     printf("\t    |   |_| ||   _   || ||_|| ||   |___        |_______|  |___|  |_______||___|  |_|  |__|      \n");
-    printf("\t    |_______||__| |__||_|   |_||_______|                                                      \n\n\n");
-    printf("\t                                                                                              \n");
-
-    printf("\t       $$$$$$$$$$$                    |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|                                         \n");
-    printf("\t     $$$$$$$$$$$$$$$                  |     ___       ___       ___     |                                         \n");
-    printf("\t   $$$$$$$$$$$$$$$$$$$                |    |   |     |   |     |   |    |                                         \n");
-    printf("\t   $$   $  $$$$$  $ $$                |   |     |   |     |   |     |   |                                         \n");
-    printf("\t   $$ $    $$$$$ $  $$                -----------------------------------                                         \n");
-    printf("\t    $$$$$$$$$$$$$$$$$         |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|                                           \n");
-    printf("\t     $$$$$$$$$$$$$$$          |     ____       ____       ____     ____       ____      |                                           \n");
-    printf("\t      $$$$      $$$           |    |    |     |    |     |    |   |    |     |    |     |                                           \n");
-    printf("\t       $$$      $$            |   |      |   |      |   |      | |      |   |      |    |                                           \n");
-    printf("\t        $$$$$$$$$$            -----------------------------------------------------------                                           \n");
-    printf("\t                                                                         \n");
-
-
+    printf("\t    |_______||__| |__||_|   |_||_______|                                                        \n");
+    printf("\n\n");
+    printf("       $$$$$$$$$$$                    |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|                \n");
+    printf("     $$$$$$$$$$$$$$$                  |     ___       ___       ___     |                 \n");
+    printf("   $$$$$$$$$$$$$$$$$$$                |    |   |     |   |     |   |    |                 \n");
+    printf("   $$   $  $$$$$  $ $$                |   |     |   |     |   |     |   |                 \n");
+    printf("   $$ $    $$$$$ $  $$                -----------------------------------                 \n");
+    printf("    $$$$$$$$$$$$$$$$$       |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|   \n");
+    printf("     $$$$$$$$$$$$$$$        |     ____       ____       ____     ____       ____      |   \n");
+    printf("      $$$$      $$$         |    |    |     |    |     |    |   |    |     |    |     |   \n");
+    printf("       $$$      $$          |   |      |   |      |   |      | |      |   |      |    |   \n");
+    printf("        $$$$$$$$$$          -----------------------------------------------------------   \n");
 }
 
-//¸Ş´º Ãâ·Â ÇÔ¼ö & ¸Ş´º ¼±ÅÃ±â´É ÇÔ¼ö
-int menuDraw1() {
+//ë©”ë‰´ ì¶œë ¥ í•¨ìˆ˜ & ë©”ë‰´ ì„ íƒê¸°ëŠ¥ í•¨ìˆ˜
+int Overmenu() {
     int x = 55;
-    int y = 20;
+    int y = 26;
     int menuIndex = 0;
-    char menuItems[2][20] = { "µ¹¾Æ°¡±â","Á¾   ·á" };
+    char menuItems[3][20] = { "ê²Œ ì„ ì‹œ ì‘", "ê²Œ ì„ ì • ë³´", "    ì¢… ë£Œ    " };
 
     while (1) {
-        // ¸Ş´º ¾ÆÀÌÅÛ Ãâ·Â
-        for (int i = 0; i < 2; i++) {
+        // ë©”ë‰´ ì•„ì´í…œ ì¶œë ¥
+        for (int i = 0; i < 3; i++) {
             gotoxy(x, y + i);
             if (i == menuIndex) printf("> %s", menuItems[i]);
             else printf("  %s", menuItems[i]);
         }
 
-        // ÀÔ·Â Ã³¸®
-        int n = keyControl1();
+        // ì…ë ¥ ì²˜ë¦¬
+        int n = O_keyControl();
         switch (n) {
         case UP: {
             if (menuIndex > 0) menuIndex--;
@@ -88,20 +84,23 @@ int menuDraw1() {
         }
         case SUBMIT: {
             if (menuIndex == 0) {
-                return main(); // µ¹¾Æ°¡±â¸¦ ¼±ÅÃÇÏ¸é FirstScreen() ÇÔ¼ö·Î ÀÌµ¿
+                return main();
             }
             else if (menuIndex == 1) {
-                exit(0); // Á¾·á¸¦ ¼±ÅÃÇÏ¸é ÇÁ·Î±×·¥À» Á¾·á
+                exit(0);
+
             }
         }
         }
     }
 }
 
-int keyControl1() {
+
+////ìœ„,ì•„ë˜ ,ì™¼,ìš° í‚¤ê°’ ì§€ì • í•¨ìˆ˜ 
+int O_keyControl() {
     int temp = _getch();
 
-    // ¹Ì¼¼ÇÑ À§Ä¡ Á¶Á¤À» À§ÇÑ Ãß°¡ ÄÚµå
+    // ë¯¸ì„¸í•œ ìœ„ì¹˜ ì¡°ì •ì„ ìœ„í•œ ì¶”ê°€ ì½”ë“œ
     if (temp == 0xE0 || temp == 0)
     {
         temp = _getch();
@@ -116,9 +115,10 @@ int keyControl1() {
         return LEFT;
     case 77: // VK_RIGHT
         return RIGHT;
-    case ' ': // Space
+    case 13: // Space
         return SUBMIT;
     default:
         return 0;
     }
 }
+

@@ -16,7 +16,7 @@
 //함수 정의 
 void TitleDraw();   //제목 출력
 void init();        //콘솔창 크기함수 
-void printGameInstructions(); // 게임 방법 화면 출력 함수
+//oid printGameInstructions(); // 게임 방법 화면 출력 함수
 int menuDraw();     //메뉴 출력&선택 함수 
 int keyControl();   //화살표 선택하는 거
 
@@ -27,7 +27,7 @@ int main()
     init();
     TitleDraw();
     menuDraw();
-    printGameInstructions(); // 게임 방법 화면 출력 함수
+    //printGameInstructions(); // 게임 방법 화면 출력 함수
     //while (1) {
     //    TitleDraw(); //화면 출력
     //    int menuCode = menuDraw();
@@ -63,7 +63,7 @@ void TitleDraw()
     printf("\t    _____| ||   _   | |     | |   |___     |   |    |   |  | ||   | | | |   ||     |_ |   |___  _____| |      \n");
     printf("\t   |_______||__| |__|  |___|  |_______|    |___|    |___|  |_||___| |_|  |__||_______||_______||_______|      \n");
     printf("\n\n\n");
-    
+
     printf("\t        $$$$$$$ \n");
     printf("\t       $$ $$$$$$\t   $$                                                             \n");
     printf("\t       $$$$$$$$$\t  $$$$         |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|                \n");
@@ -75,7 +75,7 @@ void TitleDraw()
     printf("\t  $$$$$$$$$$    \t   |     ____       ____       ____     ____       ____      |    \n");
     printf("\t    $$$$$$$$    \t   |    |    |     |    |     |    |   |    |     |    |     |    \n");
     printf("\t     $$$$$$     \t   |   |      |   |      |   |      | |      |   |      |    |    \n");
-    printf("\t\t\t\t                -----------------------------------------------------------                \n");
+    printf("\t\t                   -----------------------------------------------------------                \n");
 }
 
 //메뉴 출력 함수 & 메뉴 선택기능 함수
@@ -109,7 +109,7 @@ int menuDraw() {
                 return Function();
             }
             else if (menuIndex == 1) {
-                printGameInstructions();
+                GameRule();
 
             }
             else if (menuIndex == 2) {
@@ -140,14 +140,10 @@ int keyControl() {
         return LEFT;
     case 77: // VK_RIGHT
         return RIGHT;
-    case ' ': // Space
+    case 13: // Space
         return SUBMIT;
     default:
         return 0;
     }
 }
 
-void printGameInstructions() {
-    LPCWSTR message = L"상하좌우 키를 나타내어 플레이어를 움직이며 공격은 스페이스바 입니다.";
-    MessageBoxW(NULL, message, L"알림", MB_OK);
-}
