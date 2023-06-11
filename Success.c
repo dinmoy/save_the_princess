@@ -16,7 +16,7 @@
 //함수 정의 
 void SuccessDraw();   //제목 출력
 void init2();        //콘솔창 크기함수 
-int SuccessMenu();     //메뉴 출력&선택 함수 
+int Successmenu();     //메뉴 출력&선택 함수 
 int S_keyControl();   //화살표 선택하는 거
 
 //main함수 

@@ -16,7 +16,7 @@
 void ruleDraw();  //제목 출력
 void init3();        //콘솔창 크기함수 
 int rulemenu();     //메뉴 출력&선택 함수 
-int G_keyCoG_ntrol();   //화살표 선택하는 거
+int G_keyControl();   //화살표 선택하는 거
 
 
 //main함수 
@@ -59,7 +59,7 @@ void ruleDraw() {
 }
 
 //메뉴 출력 함수 & 메뉴 선택기능 함수
-int Rulemenu() {
+int rulemenu() {
     int x = 55;
     int y = 26;
     int menuIndex = 0;
