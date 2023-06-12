@@ -1,4 +1,4 @@
-﻿#include <stdlib.h>
+﻿#include <stdio.h> u
 #include <time.h>
 #include <conio.h>
 #include <Windows.h>
@@ -6,12 +6,23 @@
 
 #pragma warning (disable : 4996)
 
+#define UP 0
+#define DOWN 1
+#define LEFT 2
+#define RIGHT 3
+#define SUBMIT 4
+
 //esc 아스키 코드
 #define ESC 27
 //최대 적 수
-#define MAXENEMY 30
+#define MAXENEMY 4
 //최대 총알 수
 #define MAXBALL 10
+
+void SuccessDraw();   //제목 출력
+void init2();        //콘솔창 크기함수 
+int Successmenu();     //메뉴 출력&선택 함수 
+int S_keyControl();   //화살표 선택하는 거
 
 //점수
 int Score;
@@ -30,8 +41,8 @@ struct Enemy
     int movementcal;
 
     //적의 움직임 애니메이션을 표현하기 위한 변수
-    int nFrame;
-    int nStay;
+    int Frame;
+    int Stay;
 }
 Enemy[MAXENEMY];
 
@@ -40,12 +51,12 @@ struct Bullet
 {
     BOOL exist;
     int x, y;
-    int nFrame;
-    int nStay;
+    int Frame;
+    int Stay;
 }
 Bullet[MAXBALL];
 
-const char* Type_Enemy[] = { " ^_^ ", " >_< ", " *_* ", " x_x " };
+const char* Type_Enemy[] = { " ◈◈◈ ", " ●__● ", " ⊙o⊙ ", " ＠＠＠ " };
 
 void textcolor(int colorNum) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), colorNum);
@@ -53,31 +64,47 @@ void textcolor(int colorNum) {
 
 void drawscreen() {
     textcolor(14);
-    printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■                                                                        ■\n");
-    printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+    printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ ┌──────────────────────────────────┐\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■                                                                        ■ │                                  │\n");
+    printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ └──────────────────────────────────┘\n");
 }
+
+void escreen()
+{
+    srand((unsigned int)time(NULL)); // 난수 초기화
+
+    // 적 초기화
+    for (int i = 0; i < MAXENEMY; i++)
+    {
+        Enemy[i].exist = FALSE;
+        Enemy[i].Frame = 0;
+        Enemy[i].Stay = 0;
+        Enemy[i].x = rand() % 80 + 10; // 10부터 89까지의 랜덤한 x 좌표
+        Enemy[i].y = rand() % 20 + 1;  // 1부터 20까지의 랜덤한 y 좌표
+    }
+}
+
 void Function()
 {
 
@@ -112,16 +139,6 @@ void Function()
         {
             if (player.x < 72)
                 player.x++;
-        }
-        if (GetAsyncKeyState(VK_UP))
-        {
-            if (player.y > 6)
-                player.y--;
-        }
-        if (GetAsyncKeyState(VK_DOWN))
-        {
-            if (player.y < 72)
-                player.y++;
         }
 
         // 키 입력 처리-- 총알발사랑 종료(조금더 코드 분석하자)
@@ -168,50 +185,50 @@ void Function()
         }
 
         // 적군 생성
-        if (rand() % 50 == 0)
-        {
-            for (i = 0; i < MAXENEMY && Enemy[i].exist == TRUE; i++) { ; }
-            if (i != MAXENEMY)
-            {
-                if ((rand() % 2) + 1 == 1)
-                {
-                    Enemy[i].x = 7;
-                    Enemy[i].movementcal = 1;
-                }
+        int available = -1;
+        for (int i = 0; i < MAXENEMY; i++) {
+            if (Enemy[i].exist == FALSE) {
+                available = i;
+                break;
+            }
+        }
 
-                else
-                {
-                    Enemy[i].x = 70;
-                    Enemy[i].movementcal = -1;
-                }
+        if (available != -1) {
+            int position=0;
+            int newX, newY;
 
-                //while로 바꾸장!
-                for (;;) {
-                    Enemy[i].y = rand() % 10 + 2;
-                    for (BulletFound = FALSE, j = 0; j < MAXENEMY; j++)
-                    {
-                        if (Enemy[j].exist == TRUE && Enemy[j].y == Enemy[i].y)
-                        {
-                            BulletFound = TRUE;
-                            break;
-                        }
-                    }
-                    if (BulletFound == FALSE)
-                    {
+            do {
+                position= 0;
+                if ((rand() % 2) + 1 == 1) {
+                    newX = 7;
+                    Enemy[available].movementcal = 1;
+                }
+                else {
+                    newX = 70;
+                    Enemy[available].movementcal = -1;
+                }
+                newY = rand() % 10 + 2;
+
+                for (int j = 0; j < MAXENEMY; j++) {
+                    if (Enemy[j].exist && (Enemy[j].x == newX && Enemy[j].y == newY)) {
+                        position = 1;
                         break;
                     }
                 }
-                Enemy[i].nFrame = Enemy[i].nStay = rand() % 6 + 1;
-                Enemy[i].Type = rand() % (sizeof(Type_Enemy) / sizeof(Type_Enemy[0])); //random(sizeof(Type_Enemy) / sizeof(Type_Enemy[0]));
-                Enemy[i].exist = TRUE;
-            }
+            } while (position);
+
+            Enemy[available].x = newX;
+            Enemy[available].y = newY;
+            Enemy[available].Frame = Enemy[available].Stay = rand() % 6 + 1;
+            Enemy[available].Type = rand() % (sizeof(Type_Enemy) / sizeof(Type_Enemy[0]));
+            Enemy[available].exist = TRUE;
         }
 
 
         // 적군과 아군 총알의 충돌 판정
         for (i = 0; i < MAXENEMY; i++)
         {
-            if (Enemy[i].x == 120) Enemy[i].exist = FALSE;
+            if (Enemy[i].x > 120|| Enemy[i].y <=2) Enemy[i].exist = FALSE;
 
             if (Enemy[i].exist == FALSE)
                 continue;
@@ -224,7 +241,7 @@ void Function()
                 gotoxy(Enemy[i].x - 3, Enemy[i].y);
                 puts("       ");
                 Score += 5;
-                if (Score == 5) Success();
+                if (Score == 50) Success();
                 break;
 
             }
@@ -237,9 +254,9 @@ void Function()
             if (Bullet[i].exist == FALSE)
                 continue;
 
-            if (--Bullet[i].nStay == 0)
+            if (--Bullet[i].Stay == 0)
             {
-                Bullet[i].nStay = Bullet[i].nFrame;
+                Bullet[i].Stay = Bullet[i].Frame;
                 gotoxy(Bullet[i].x, Bullet[i].y); putch(' ');
 
                 if (Bullet[i].y >= 23)
@@ -271,8 +288,8 @@ void Function()
         // 적군 이동 및 출력
         for (i = 0; i < MAXENEMY; i++) {
             if (Enemy[i].exist == FALSE) continue;
-            if (--Enemy[i].nStay == 0) {
-                Enemy[i].nStay = Enemy[i].nFrame;
+            if (--Enemy[i].Stay == 0) {
+                Enemy[i].Stay = Enemy[i].Frame;
                 if (Enemy[i].x >= 69 || Enemy[i].x <= 6) {
                     Enemy[i].exist = FALSE;
                     gotoxy(Enemy[i].x - 3, Enemy[i].y);
@@ -289,7 +306,7 @@ void Function()
                         if (j != MAXBALL) {
                             Bullet[j].x = Enemy[i].x + 2;
                             Bullet[j].y = Enemy[i].y + 1;
-                            Bullet[j].nFrame = Bullet[j].nStay = Enemy[i].nFrame * 6;
+                            Bullet[j].Frame = Bullet[j].Stay = Enemy[i].Frame * 6;
                             Bullet[j].exist = TRUE;
                         }
                     }
@@ -302,40 +319,148 @@ void Function()
         // 파이터 및 점수 출력
         CursorView(0);
         gotoxy(player.x - 3, 23);
-        puts(" ☆ ");
+        puts(" ★ ");
         gotoxy(67, 2);
         printf("점수: %d", Score);
 
-        gotoxy(80, 10);
-        printf("♣♣");
+        gotoxy(82, 4);
+        printf("♣작전명! 공주를 구하여라~♣");
 
-        gotoxy(80, 12);
-        printf("위 : ↑");
+        gotoxy(80, 7);
+        printf("=============미션!===============\n\n");
+        printf("\t\t\t\t\t\t\t\t\t\t적을 공격하여 공주를 지켜내라!");
+       
+        gotoxy(80, 11);
+        printf("해당키를 사용하여 적을 공격하라!");
 
-        gotoxy(80, 14);
-        printf("아래 : ↓");
+        printf("\n");
 
-        gotoxy(80, 16);
-        printf("왼쪽 : ←");
+        gotoxy(80, 13);
+        printf("\t\t오른쪽 : →");
 
-        gotoxy(80, 18);
-        printf("오른쪽 : →");
+        gotoxy(80, 15);
+        printf("\t\t왼쪽   : ← \n");
 
-        gotoxy(80, 20);
-        printf("공격 : SPACE");
+        gotoxy(80, 17);
+        printf("\t\t공격   : SPACE\n\n");
+
+        //gotoxy(80, 19);
+        //printf("\t\t플레이어 : ★\n\n");
+        //printf("\t\t\t\t\t\t\t\t\t\t 적 : ◈ , ●__● ,  ⊙o⊙,  ▣ ");
+
 
         // 초당 10 프레임
         Sleep(40);
     }
 end:
-    /*system("cls");
-    gotoxy(30, 10);
-    printf("==========================GAMEOVER==========================\n\n");
-    gotoxy(58, 15);
-    printf("점수=%d\n\n\n\n\n\n\n\n\n\n\n\n", Score);
-    CursorView(0);
-    getchar();*/
     textcolor(15);
     Over();
 
+}
+//main함수 
+int Success()
+{
+    init2();
+    SuccessDraw();
+    Successmenu();
+    return 0;
+}
+//콘솔 화면 지정 함수 
+void init2() {
+    system("mode con:cols=120 lines=30 | title Save the Princess");
+}
+
+//제목 출력 함수  \n");
+void SuccessDraw()
+{
+    int x = 5,y = 1;
+    textcolor(14);
+    gotoxy(x, y++); printf("\t\t\t\t  __   __  ___   _______  _______  ___   _______  __    _");
+    gotoxy(x, y++); printf("\t\t\t\t |  |_|  ||   | |       ||       ||   | |       ||  |  | |");
+    gotoxy(x, y++); printf("\t\t\t\t |       ||   | |  _____ || _____||   | |   _   ||   |_| |");
+    gotoxy(x, y++); printf("\t\t\t\t |       ||   | | |_____ | |_____ |   | |  | |  ||       |");
+    gotoxy(x, y++); printf("\t\t\t\t |       ||   | |_____ || _____  ||   | |  |_|  ||  _    |");
+    gotoxy(x, y++); printf("\t\t\t\t | ||_|| ||   |  _____| | _____| ||   | |       || | |   |");
+    gotoxy(x, y++); printf("\t\t\t\t |_|   |_||___| |_______||_______||___| |_______||_|  |__|");
+    gotoxy(x, y++); printf("\t\t\t\t _______  __   __  _______  _______  _______  _______  _______");
+    gotoxy(x, y++); printf("\t\t\t\t|       ||  | |  ||       ||       ||       ||       ||       |");
+    gotoxy(x, y++); printf("\t\t\t\t|  _____||  | |  ||       ||       ||    ___||  _____||  _____|");
+    gotoxy(x, y++); printf("\t\t\t\t| |_____ |  |_|  ||       ||       ||   |___ | |_____ | |_____ ");
+    gotoxy(x, y++); printf("\t\t\t\t| _____ ||       ||      _||      _||   _____|| _____|| ____  |");
+    gotoxy(x, y++); printf("\t\t\t\t  _____|||       ||     |_ |     |_ |   |___  _____| | _____| |");
+    gotoxy(x, y++); printf("\t\t\t\t|_______||_______||_______||_______||_______||_______||_______|");
+    gotoxy(x, y++);
+    gotoxy(x, y++); printf("                                          \t\t\t|▶ ");
+    gotoxy(x, y++); printf("                                          \t\t\t| ");
+    gotoxy(x, y++); printf("\t   $$$    $$$     \t\t      ■■■■■■■■■■■■■■■■■                ");
+    gotoxy(x, y++); printf("\t  $$$$$  $$$$$    \t\t      ■                              ■                ");
+    gotoxy(x, y++); printf("\t $$$$$$$$$$$$$$$  \t\t      ■       점   수 : %d           ■               ", Score);
+    gotoxy(x, y++); printf("\t$$$$$$$$$$$$$$$$$ \t\t      ■                              ■                ");
+    gotoxy(x, y++); printf("\t $$$$$$$$$$$$$$   \t\t      ■■■■■■■■■■■■■■■■■                ");
+    gotoxy(x, y++); printf("\t  $$$$$$$$$$$     \t  |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-| ");
+    gotoxy(x, y++); printf("\t    $$$$$$$       \t  |     ____       ____       ____     ____       ____      | ");
+    gotoxy(x, y++); printf("\t      $$$$        \t  |    |    |     |    |     |    |   |    |     |    |     | ");
+    gotoxy(x, y++); printf("\t       $$         \t  |    |    |     |    |     |    |   |    |     |    |     | ");
+    gotoxy(x, y++); printf("\t                \t    ----------------------------------------------------------- ");
+}//메뉴 출력 함수 & 메뉴 선택기능 함수
+int Successmenu() {
+    int x = 55;
+    int y = 28;
+    int menuIndex = 0;
+    char menuItems[2][20] = { "돌아가기","종   료" };
+
+    while (1) {
+        // 메뉴 아이템 출력
+        for (int i = 0; i < 2; i++) {
+            gotoxy(x, y + i);
+            if (i == menuIndex) printf("> %s", menuItems[i]);
+            else printf("  %s", menuItems[i]);
+        }
+
+        // 입력 처리
+        int n = S_keyControl();
+        switch (n) {
+        case UP: {
+            if (menuIndex > 0) menuIndex--;
+            break;
+        }
+        case DOWN: {
+            if (menuIndex < 2) menuIndex++;
+            break;
+        }
+        case SUBMIT: {
+            if (menuIndex == 0) {
+                main(); // 돌아가기를 선택하면 FirstScreen() 함수로 이동
+            }
+            else if (menuIndex == 1) {
+                exit(0); // 종료를 선택하면 프로그램을 종료
+            }
+        }
+        }
+    }
+}
+
+int S_keyControl() {
+    int temp = _getch();
+
+    // 미세한 위치 조정을 위한 추가 코드
+    if (temp == 0xE0 || temp == 0)
+    {
+        temp = _getch();
+    }
+
+    switch (temp) {
+    case 72: // VK_UP
+        return UP;
+    case 80: // VK_DOWN
+        return DOWN;
+    case 75: // VK_LEFT
+        return LEFT;
+    case 77: // VK_RIGHT
+        return RIGHT;
+    case 13: // Space
+        return SUBMIT;
+    default:
+        return 0;
+    }
 }
