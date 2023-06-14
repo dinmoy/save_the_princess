@@ -5,6 +5,8 @@
 #include <Windows.h>
 #include <math.h>
 #include "console.h"
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 
 //키보드값
 #define UP 0
@@ -14,47 +16,35 @@
 #define SUBMIT 4
 
 //함수 정의 
-void TitleDraw();   //제목 출력
-void init();        //콘솔창 크기함수 
-//oid printGameInstructions(); // 게임 방법 화면 출력 함수
-int menuDraw();     //메뉴 출력&선택 함수 
-int keyControl();   //화살표 선택하는 거
+void TitleDraw();   
+void init();
+int menuDraw();      
+int keyControl();  
 
 
-//main함수 
+
 int main()
 {
-    init();
-    TitleDraw();
-    menuDraw();
-    Function();
-    escreen();
+    PlaySound(TEXT("Waterfall.wav"), NULL, SND_ASYNC | SND_LOOP);
+    while (1)
+    {
+        init();
+        TitleDraw();
+        menuDraw();
+        Sleep(1000);
+    }
+    
+     //일반 재생
 
 
-    //printGameInstructions(); // 게임 방법 화면 출력 함수
-    //while (1) {
-    //    TitleDraw(); //화면 출력
-    //    int menuCode = menuDraw();
-    //    if (menuCode == 0) {
-    //        //게임 시작으로 이동
-    //    }
-    //    else if (menuCode == 2) {
-    //        //게임 정보로 이동
-    //        infoDraw();
-    //    }
-    //    else if (menuCode == 4){
-    //        return 0;
-    //    }
-    //    system("cls");
-    //}
     return 0;
 }
-//콘솔 화면 지정 함수 
+
+
 void init() {
     system("mode con:cols=120 lines=30 | title Save the Princess");
 }
 
-//제목 출력 함수  \n");
 void TitleDraw()
 {
     int x = 5, y = 3;
@@ -84,22 +74,21 @@ void TitleDraw()
     gotoxy(x, y++); printf("\t\t                   -----------------------------------------------------------    ");
 }
 
-//메뉴 출력 함수 & 메뉴 선택기능 함수
 int menuDraw() {
+    textcolor(7);
     int x = 55;
     int y = 26;
     int menuIndex = 0;
-    char menuItems[3][20] = { "게 임 시 작", "게 임 정 보", "    종 료    " };
+    char menuItems[2][20] = { "게 임 시 작", "게 임 정 보"};
 
     while (1) {
-        // 메뉴 아이템 출력
-        for (int i = 0; i < 3; i++) {
+       
+        for (int i = 0; i < 2; i++) {
             gotoxy(x, y + i);
             if (i == menuIndex) printf("> %s", menuItems[i]);
             else printf("  %s", menuItems[i]);
         }
 
-        // 입력 처리
         int n = keyControl();
         switch (n) {
         case UP: {
@@ -118,20 +107,15 @@ int menuDraw() {
                 GameRule();
 
             }
-            else if (menuIndex == 2) {
-                exit(0);
-            }
-        }
+          }
         }
     }
 }
 
 
-////위,아래 ,왼,우 키값 지정 함수 
 int keyControl() {
     int temp = _getch();
 
-    // 미세한 위치 조정을 위한 추가 코드
     if (temp == 0xE0 || temp == 0)
     {
         temp = _getch();

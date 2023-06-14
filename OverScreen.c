@@ -6,34 +6,34 @@
 #include <math.h>
 
 
-//키보드값
 #define UP 0
 #define DOWN 1
 #define LEFT 2
 #define RIGHT 3
 #define SUBMIT 4
 
-//함수 정의 
-void OverDraw();   //제목 출력
-void init1();        //콘솔창 크기함수 
-int Overmenu();     //메뉴 출력&선택 함수 
-int O_keyControl();   //화살표 선택하는 거
-
-
-//main함수 
+void OverDraw();   
+void init1();         
+int Overmenu();      
+int O_keyControl();   
+ 
 int Over()
 {
-    init1();
-    OverDraw();
-    Overmenu();
-    return 0;
+    PlaySound(TEXT("Overbgm.wav"), NULL, SND_ASYNC | SND_LOOP);
+    while (1)
+    {
+        init1();
+        OverDraw();
+        Overmenu();
+        Sleep(1000);
+    }
 }
-//콘솔 화면 지정 함수 
+
 void init1() {
     system("mode con:cols=120 lines=30 | title Save the Princess");
 }
 
-//제목 출력 함수  \n");
+
 void OverDraw()
 {
     int x = 5, y = 3;
@@ -60,16 +60,17 @@ void OverDraw()
     gotoxy(x, y++); printf("\t        $$$$$$$$$$          -----------------------------------------------------------   ");
 }
 
-//메뉴 출력 함수 & 메뉴 선택기능 함수
+
 int Overmenu() {
-    int x = 55;
+    textcolor(7);
+    int x = 57;
     int y = 26;
     int menuIndex = 0;
-    char menuItems[3][20] = { "돌아가기","종    료" };
+    char menuItems[1][20] = { "돌아가기"};
 
     while (1) {
         // 메뉴 아이템 출력
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             gotoxy(x, y + i);
             if (i == menuIndex) printf("> %s", menuItems[i]);
             else printf("  %s", menuItems[i]);
@@ -78,21 +79,9 @@ int Overmenu() {
         // 입력 처리
         int n = O_keyControl();
         switch (n) {
-        case UP: {
-            if (menuIndex > 0) menuIndex--;
-            break;
-        }
-        case DOWN: {
-            if (menuIndex < 2) menuIndex++;
-            break;
-        }
         case SUBMIT: {
             if (menuIndex == 0) {
                 return main();
-            }
-            else if (menuIndex == 1) {
-                exit(0);
-
             }
         }
         }
@@ -100,26 +89,26 @@ int Overmenu() {
 }
 
 
-////위,아래 ,왼,우 키값 지정 함수 
+
 int O_keyControl() {
     int temp = _getch();
 
-    // 미세한 위치 조정을 위한 추가 코드
+
     if (temp == 0xE0 || temp == 0)
     {
         temp = _getch();
     }
 
     switch (temp) {
-    case 72: // VK_UP
+    case 72: 
         return UP;
-    case 80: // VK_DOWN
+    case 80: 
         return DOWN;
-    case 75: // VK_LEFT
+    case 75: 
         return LEFT;
-    case 77: // VK_RIGHT
+    case 77: 
         return RIGHT;
-    case 13: // Space
+    case 13: 
         return SUBMIT;
     default:
         return 0;

@@ -5,21 +5,18 @@
 #include <Windows.h>
 #include <math.h>
 
-//키보드값
 #define UP 0
 #define DOWN 1
 #define LEFT 2
 #define RIGHT 3
 #define SUBMIT 4
 
-//함수 정의 
 void ruleDraw();  //제목 출력
 void init3();        //콘솔창 크기함수 
 int rulemenu();     //메뉴 출력&선택 함수 
 int G_keyControl();   //화살표 선택하는 거
 
 
-//main함수 
 int GameRule()
 {
     init3();
@@ -27,12 +24,12 @@ int GameRule()
     rulemenu();
     return 0;
 }
-//콘솔 화면 지정 함수 
+   
 void init3() {
     system("mode con:cols=120 lines=30 | title Save the Princess");
 }
 
-//제목 출력 함수  \n");
+
 void ruleDraw() {
     
     int x = 5,y= 5;
@@ -40,7 +37,8 @@ void ruleDraw() {
     gotoxy(x, y++); printf("\t\t\t                    ♣작전명! 공주를 구하여라!♣                   ");
     gotoxy(x, y++); printf("\t\t\t===================================================================");
     gotoxy(x, y++); printf("\t\t\t                                                                   ");
-    gotoxy(x, y++); printf("\t\t\t☆ 게임 방법 ☆                                                    ");
+    gotoxy(x, y++); printf("\t\t\t\t\t          [게임 방법 ☆]                                   ");
+    gotoxy(x, y++);
     gotoxy(x, y++); printf("\t\t\t- 화면에 나타나는 적들을 물리치고, 폭탄을 피하자!                  ");
     gotoxy(x, y++); printf("\t\t\t- 플레이어는 ↑ ↓ ← → 키를 사용하여 움직일 수 있습니다.         "); ;
     gotoxy(x, y++); printf("\t\t\t- 스페이스 바를 사용하여 총알을 발사할 수 있습니다.                ");
@@ -49,7 +47,7 @@ void ruleDraw() {
     gotoxy(x, y++); printf("\t\t\t- 적을 죽일때 마다 점수는 5점씩 올라갑니다.                        ");
     gotoxy(x, y++); printf("\t\t\t- 점수가 50점이 되면 미션을 성공하게 됩니다.  ");
     gotoxy(x, y++); 
-    gotoxy(x, y++); printf("\t\t\t☆ 조작법 ☆");
+    gotoxy(x, y++); printf("\t\t\t\t\t          [☆ 조작법 ☆]");
     gotoxy(x, y++); printf("\t\t\t- ←: 왼쪽으로 이동                                       ^ _ ^ ");
     gotoxy(x, y++); printf("\t\t\t- →: 오른쪽으로 이동                                    ( o.o )");
     gotoxy(x, y++); printf("\t\t\t- 스페이스 바: 총알 발사                                  > ^ < ");
@@ -58,21 +56,20 @@ void ruleDraw() {
 
 }
 
-//메뉴 출력 함수 & 메뉴 선택기능 함수
 int rulemenu() {
+    textcolor(7);
     int x = 55;
     int y = 26;
     int menuIndex = 0;
     char menuItems[2][20] = { "다   음","돌아가기" };
 
     while (1) {
-        // 메뉴 아이템 출력
+        
         for (int i = 0; i < 2; i++) {
             gotoxy(x, y + i);
             if (i == menuIndex) printf("> %s", menuItems[i]);
             else printf("  %s", menuItems[i]);
         }
-        // 입력 처리
         int n = G_keyControl();
         switch (n) {
         case UP: {
@@ -97,26 +94,24 @@ int rulemenu() {
 }
 
 
-////위,아래 ,왼,우 키값 지정 함수 
 int G_keyControl() {
     int temp = _getch();
 
-    // 미세한 위치 조정을 위한 추가 코드
     if (temp == 0xE0 || temp == 0)
     {
         temp = _getch();
     }
 
     switch (temp) {
-    case 72: // VK_UP
+    case 72: 
         return UP;
-    case 80: // VK_DOWN
+    case 80: 
         return DOWN;
-    case 75: // VK_LEFT
+    case 75:
         return LEFT;
-    case 77: // VK_RIGHT
+    case 77: 
         return RIGHT;
-    case 13: // Space
+    case 13: 
         return SUBMIT;
     default:
         return 0;

@@ -12,11 +12,8 @@
 #define RIGHT 3
 #define SUBMIT 4
 
-//esc 아스키 코드
 #define ESC 27
-//최대 적 수
 #define MAXENEMY 4
-//최대 총알 수
 #define MAXBALL 10
 
 void SuccessDraw();   //제목 출력
@@ -90,20 +87,6 @@ void drawscreen() {
     printf("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ └──────────────────────────────────┘\n");
 }
 
-void escreen()
-{
-    srand((unsigned int)time(NULL)); // 난수 초기화
-
-    // 적 초기화
-    for (int i = 0; i < MAXENEMY; i++)
-    {
-        Enemy[i].exist = FALSE;
-        Enemy[i].Frame = 0;
-        Enemy[i].Stay = 0;
-        Enemy[i].x = rand() % 80 + 10; // 10부터 89까지의 랜덤한 x 좌표
-        Enemy[i].y = rand() % 20 + 1;  // 1부터 20까지의 랜덤한 y 좌표
-    }
-}
 
 void Function()
 {
@@ -115,7 +98,7 @@ void Function()
 
     srand((unsigned)time(NULL));
     system("cls");
-    //CursorView(0);//커서 숨기기
+    
 
     struct Player player;
     player.x = 60;
@@ -141,7 +124,6 @@ void Function()
                 player.x++;
         }
 
-        // 키 입력 처리-- 총알발사랑 종료(조금더 코드 분석하자)
         if (kbhit())
         {
             ch = getch();
@@ -335,18 +317,14 @@ void Function()
 
         printf("\n");
 
-        gotoxy(80, 13);
+        gotoxy(80, 15);
         printf("\t\t오른쪽 : →");
 
-        gotoxy(80, 15);
+        gotoxy(80, 17);
         printf("\t\t왼쪽   : ← \n");
 
-        gotoxy(80, 17);
+        gotoxy(80, 19);
         printf("\t\t공격   : SPACE\n\n");
-
-        //gotoxy(80, 19);
-        //printf("\t\t플레이어 : ★\n\n");
-        //printf("\t\t\t\t\t\t\t\t\t\t 적 : ◈ , ●__● ,  ⊙o⊙,  ▣ ");
 
 
         // 초당 10 프레임
@@ -360,10 +338,13 @@ end:
 //main함수 
 int Success()
 {
-    init2();
-    SuccessDraw();
-    Successmenu();
-    return 0;
+    PlaySound(TEXT("Successbgm.wav"), NULL, SND_ASYNC | SND_LOOP);
+    while (1)
+    {
+        init2();
+        SuccessDraw();
+        Successmenu();
+    }
 }
 //콘솔 화면 지정 함수 
 void init2() {
@@ -394,7 +375,7 @@ void SuccessDraw()
     gotoxy(x, y++); printf("                                          \t\t\t| ");
     gotoxy(x, y++); printf("\t   $$$    $$$     \t\t      ■■■■■■■■■■■■■■■■■                ");
     gotoxy(x, y++); printf("\t  $$$$$  $$$$$    \t\t      ■                              ■                ");
-    gotoxy(x, y++); printf("\t $$$$$$$$$$$$$$$  \t\t      ■       점   수 : %d           ■               ", Score);
+    gotoxy(x, y++); printf("\t $$$$$$$$$$$$$$$  \t\t      ■        점   수 : %2d          ■               ", Score);
     gotoxy(x, y++); printf("\t$$$$$$$$$$$$$$$$$ \t\t      ■                              ■                ");
     gotoxy(x, y++); printf("\t $$$$$$$$$$$$$$   \t\t      ■■■■■■■■■■■■■■■■■                ");
     gotoxy(x, y++); printf("\t  $$$$$$$$$$$     \t  |-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-| ");
@@ -404,14 +385,15 @@ void SuccessDraw()
     gotoxy(x, y++); printf("\t                \t    ----------------------------------------------------------- ");
 }//메뉴 출력 함수 & 메뉴 선택기능 함수
 int Successmenu() {
-    int x = 55;
+    textcolor(7);
+    int x = 57;
     int y = 28;
     int menuIndex = 0;
-    char menuItems[2][20] = { "돌아가기","종   료" };
+    char menuItems[1][20] = { "돌아가기"};
 
     while (1) {
         // 메뉴 아이템 출력
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             gotoxy(x, y + i);
             if (i == menuIndex) printf("> %s", menuItems[i]);
             else printf("  %s", menuItems[i]);
@@ -420,20 +402,9 @@ int Successmenu() {
         // 입력 처리
         int n = S_keyControl();
         switch (n) {
-        case UP: {
-            if (menuIndex > 0) menuIndex--;
-            break;
-        }
-        case DOWN: {
-            if (menuIndex < 2) menuIndex++;
-            break;
-        }
         case SUBMIT: {
             if (menuIndex == 0) {
                 main(); // 돌아가기를 선택하면 FirstScreen() 함수로 이동
-            }
-            else if (menuIndex == 1) {
-                exit(0); // 종료를 선택하면 프로그램을 종료
             }
         }
         }
